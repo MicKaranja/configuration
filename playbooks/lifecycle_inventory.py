@@ -82,10 +82,12 @@ class LifecycleInventory():
         inventory = defaultdict(list)
 
         for group in groups:
-
             for instance in group['Instances']:
 
-                private_ip_address = instances[instance['InstanceId']]['PrivateIpAddress']
+                try:
+                    private_ip_address = instances[instance['InstanceId']]['PrivateIpAddress']
+                except:
+                    continue
                 if private_ip_address:
                     environment,deployment = self.get_e_d_from_tags(group)
                     inventory[environment + "_" + deployment + "_" + instance['LifecycleState'].replace(":","_")].append(private_ip_address)
